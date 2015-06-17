@@ -34,5 +34,29 @@ namespace HmiExample.Properties {
                 this["IpAddress"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public string AdminPass {
+            get {
+                return ((string)(this["AdminPass"]));
+            }
+            set {
+                this["AdminPass"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1234")]
+        public string ExpertPass {
+            get {
+                return ((string)(this["ExpertPass"]));
+            }
+            set {
+                this["ExpertPass"] = value;
+            }
+        }
     }
 }

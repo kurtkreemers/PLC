@@ -1,6 +1,7 @@
 ﻿#region Using
 using HmiExample.PlcConnectivity;
 using S7NetWrapper;
+using Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -38,7 +39,9 @@ namespace HmiExample
             timer.Tick += timer_Tick;        
             timer.IsEnabled = true;
             txtIpAddress.Text = Settings.Default.IpAddress;
-            lblLogin.Text = "USER";
+            lblLogin.Text = Login.LoginStatus();
+            Log.writeLog("Program started at " + DateTime.Now.TimeOfDay.ToString());
+
         }
 
         void timer_Tick(object sender, EventArgs e)
@@ -63,10 +66,18 @@ namespace HmiExample
         private void btnConnect_Click(object sender, RoutedEventArgs e)
         {
             try
-            {                
-                Plc.Instance.Connect(txtIpAddress.Text);
-                Settings.Default.IpAddress = txtIpAddress.Text;
-                Settings.Default.Save();
+            {
+                if (Login.loginAdmin || Login.loginExpert)
+                {
+                    Plc.Instance.Connect(txtIpAddress.Text);
+                    Settings.Default.IpAddress = txtIpAddress.Text;
+                    Settings.Default.Save();
+                }
+                else
+                {
+                    noPermissionBox();
+                }
+
             }
             catch(Exception exc)
             {
@@ -78,7 +89,14 @@ namespace HmiExample
         {
             try
             {
-                Plc.Instance.Disconnect();
+                if (Login.loginAdmin || Login.loginExpert)
+                {
+                    Plc.Instance.Disconnect();
+                }
+                else
+                {
+                    noPermissionBox();
+                }
             }
             catch (Exception exc)
             {
@@ -178,30 +196,21 @@ namespace HmiExample
 
         private void btnAdmin_Click(object sender, RoutedEventArgs e)
         {
-            if (!Login.loginAdmin)
-            {
+           
                 Login preview = new Login();
                 preview.Owner = this;
                 preview.ShowDialog();
-                lblLogin.Text = Login.loginAdminString;
+                lblLogin.Text = Login.LoginStatus();
                 
-            }
-            else
-            {
-                Login.loginAdmin = false;
-                lblLogin.Text = "USER";
-            }
-            
-
         }
              
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             if (MessageBox.Show("Do you want to close the program?","", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
             {
-               if (!Login.loginAdmin)
+               if (Login.LoginStatus() != "ADMIN" )
                {
-                   MessageBox.Show("You don't have the required permissions!!!","", MessageBoxButton.OK,MessageBoxImage.Hand);
+                   noPermissionBox();
                    e.Cancel = true;
                }
             }
@@ -212,15 +221,19 @@ namespace HmiExample
         }
         private void loginCheck()
         {
-            if (Login.loginAdmin)
+            if (Login.loginExpert)
                 count += 1;
             if (count > 100)
             {
                 count = 0;
-                Login.loginAdmin = false;
-                lblLogin.Text = "USER";
+                Login.loginExpert = false;
+                lblLogin.Text = Login.LoginStatus();
             }
-        }        
+        }  
+        private void noPermissionBox()
+        {
+            MessageBox.Show("You don't have the required permissions!!!", "", MessageBoxButton.OK, MessageBoxImage.Hand);
+        }
        
     }
 }

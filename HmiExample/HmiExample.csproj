@@ -126,6 +126,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{add917bf-4df7-46c4-ba5b-a07dfcfa7c15}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\S7NetWrapper\S7NetWrapper.csproj">
       <Project>{2d06c9d1-69bc-4e29-977a-2d2adb09cd7f}</Project>
       <Name>S7NetWrapper</Name>

@@ -20,12 +20,17 @@ namespace HmiExample
     public partial class Login : Window
     {
         public static bool loginAdmin;
-        public static string loginAdminString;
-        private string adminPsw = "1234";
+        public static bool loginExpert;
+        private static List<string> loginUser = new List<string>{"USER","EXPERT","ADMIN"} ;
         public Login()
         {
             InitializeComponent();
             passwordBox.Clear();
+            foreach (string passw in loginUser)
+            {
+                comboboxUserLogin.Items.Add(passw);
+            }
+            comboboxUserLogin.SelectedItem = loginUser[0];
            
         }
 
@@ -33,11 +38,25 @@ namespace HmiExample
         private void passwordBox_KeyDown(object sender, KeyEventArgs e)
         {          
 
-            if((e.Key == Key.Return) && (passwordBox.Password == adminPsw))
+
+
+            if((e.Key == Key.Return) && ((comboboxUserLogin.SelectedItem.ToString() == loginUser[2])&&(passwordBox.Password == Properties.Settings.Default.AdminPass)))
             {
                loginAdmin = true;
-               loginAdminString = "ADMIN";
+               loginExpert = false;
                this.Close();
+            }
+            else if((comboboxUserLogin.SelectedItem.ToString() == loginUser[1])&&(passwordBox.Password == Properties.Settings.Default.ExpertPass))
+            {
+                loginExpert = true;
+                loginAdmin = false;
+                this.Close();
+            }
+            else if ((comboboxUserLogin.SelectedItem.ToString() == loginUser[0])&&(e.Key == Key.Return))
+            {
+                loginExpert = false;
+                loginExpert = false;
+                this.Close();
             }
             else if (e.Key == Key.Return)
             {
@@ -45,6 +64,15 @@ namespace HmiExample
                 passwordBox.Clear();
             }
        
+        }
+        public static string LoginStatus()
+        {
+            if (loginAdmin)
+                return loginUser[2];
+            else if (loginExpert)
+                return loginUser[1];
+            else
+                return loginUser[0];
         }
 
         
