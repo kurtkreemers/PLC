@@ -42,7 +42,7 @@ namespace HmiExample
             timer.IsEnabled = true;
             txtIpAddress.Text = Settings.Default.IpAddress;
             lblLogin.Text = Login.LoginStatus().ToString();
-            Log.writeLog("Program start");
+            Log.writeLog("Program started");
         }
 
         void timer_Tick(object sender, EventArgs e)
@@ -193,18 +193,16 @@ namespace HmiExample
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
-        {
-           
+        {          
                 Login preview = new Login();
                 preview.Owner = this;
                 preview.ShowDialog();
-                lblLogin.Text = Login.LoginStatus().ToString();
-                
+                lblLogin.Text = Login.LoginStatus().ToString();               
         }
              
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            if (MessageBox.Show("Do you want to close the program?","", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Close the program?","", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
             {
                if (Login.LoginStatus() != Users.ADMIN )
                {
@@ -212,7 +210,7 @@ namespace HmiExample
                    e.Cancel = true;
                }
                else
-                   Log.writeLog("Program stop");
+                   Log.writeLog("Program stopped");
             }
             else
             {
@@ -222,8 +220,7 @@ namespace HmiExample
         private void UserAttributes()
         {
             Login.IdleControl();
-            lblLogin.Text = Login.LoginStatus().ToString();
-           
+            lblLogin.Text = Login.LoginStatus().ToString();          
         }
         private void noPermissionBox()
         {

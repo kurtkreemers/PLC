@@ -41,7 +41,8 @@ namespace S7NetWrapper
             if (error != ErrorCode.NoError)
             {
                 ConnectionState = ConnectionStates.Offline;
-                throw new Exception(error.ToString());
+                Log.writeLog(error.ToString() + " " + client.IP.ToString());
+                throw new Exception(error.ToString() + "\n" + client.IP.ToString());
             }
             ConnectionState = ConnectionStates.Online;
         }
