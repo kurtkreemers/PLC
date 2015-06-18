@@ -75,7 +75,7 @@
     <Compile Include="PswChg.xaml.cs">
       <DependentUpon>PswChg.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StringAdminVisibilityConverter.cs" />
+    <Compile Include="PlcConnectivity\StringAdminVisibilityConverter.cs" />
     <Page Include="PswChg.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
