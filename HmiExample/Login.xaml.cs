@@ -1,4 +1,5 @@
 ﻿using System;
+using S7NetWrapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Runtime.InteropServices;
 
 namespace HmiExample
 {
@@ -19,18 +21,21 @@ namespace HmiExample
     /// </summary>
     public partial class Login : Window
     {
-        public static bool loginAdmin;
-        public static bool loginExpert;
-        private static List<string> loginUser = new List<string>{"USER","EXPERT","ADMIN"} ;
+        private static bool loginAdmin;
+        private static bool loginExpert;
+        private static List<string> loginVar = new List<string>{"USER","EXPERT","ADMIN"} ;
+
+        [DllImport("user32.dll")]
+        static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
         public Login()
         {
             InitializeComponent();
             passwordBox.Clear();
-            foreach (string passw in loginUser)
+            foreach (string passw in loginVar)
             {
                 comboboxUserLogin.Items.Add(passw);
             }
-            comboboxUserLogin.SelectedItem = loginUser[0];
+            comboboxUserLogin.SelectedItem = loginVar[0];
            
         }
 
@@ -40,40 +45,93 @@ namespace HmiExample
 
 
 
-            if((e.Key == Key.Return) && ((comboboxUserLogin.SelectedItem.ToString() == loginUser[2])&&(passwordBox.Password == Properties.Settings.Default.AdminPass)))
+            if((e.Key == Key.Return) && ((comboboxUserLogin.SelectedItem.ToString() == loginVar[2])&&(passwordBox.Password == Properties.Settings.Default.AdminPass)))
             {
-               loginAdmin = true;
-               loginExpert = false;
+                LoginAdmin();
                this.Close();
             }
-            else if((comboboxUserLogin.SelectedItem.ToString() == loginUser[1])&&(passwordBox.Password == Properties.Settings.Default.ExpertPass))
+            else if((comboboxUserLogin.SelectedItem.ToString() == loginVar[1])&&(passwordBox.Password == Properties.Settings.Default.ExpertPass))
             {
-                loginExpert = true;
-                loginAdmin = false;
+                LoginExpert();
                 this.Close();
             }
-            else if ((comboboxUserLogin.SelectedItem.ToString() == loginUser[0])&&(e.Key == Key.Return))
+            else if ((comboboxUserLogin.SelectedItem.ToString() == loginVar[0])&&(e.Key == Key.Return))
             {
-                loginExpert = false;
-                loginExpert = false;
+                LoginUser();
                 this.Close();
             }
             else if (e.Key == Key.Return)
             {
+                Log.writeLog("LOGIN Failure " + comboboxUserLogin.SelectedItem.ToString() + " : wrong password" );
                 MessageBox.Show("The password you entered\n is not valid!!!","",MessageBoxButton.OK,MessageBoxImage.Information);
                 passwordBox.Clear();
             }
        
         }
+        public static void LoginAdmin()
+        {
+            loginAdmin = true;
+            loginExpert = false;
+            Log.writeLog("LOGIN " + loginVar[2]);
+            
+        }
+
+        public static void LoginExpert()
+        {
+            loginExpert = true;
+            loginAdmin = false;
+            Log.writeLog("LOGIN " + loginVar[1]);
+            
+        }
+        public static void LoginUser()
+        {
+            loginExpert = false;
+            loginExpert = false;
+            Log.writeLog("LOGIN " + loginVar[0]);
+           
+        }
         public static string LoginStatus()
         {
-            if (loginAdmin)
-                return loginUser[2];
+            if(loginAdmin)
+                return loginVar[2];
             else if (loginExpert)
-                return loginUser[1];
+                return loginVar[1];
             else
-                return loginUser[0];
+                return loginVar[0];
         }
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct LASTINPUTINFO
+        {
+            public static readonly int SizeOf = Marshal.SizeOf(typeof(LASTINPUTINFO));
+
+            [MarshalAs(UnmanagedType.U4)]
+            public int cbSize;
+            [MarshalAs(UnmanagedType.U4)]
+            public UInt32 dwTime;
+        }
+
+        public static int GetLastInputTime()
+        {
+            int nIdleTime = 0;
+            LASTINPUTINFO liiInfo = new LASTINPUTINFO();
+            liiInfo.cbSize = Marshal.SizeOf(liiInfo);
+            liiInfo.dwTime = 0;
+            int nEnvTicks = Environment.TickCount;
+            if (GetLastInputInfo(ref liiInfo))
+            {
+                int nLastInputTick = (int)liiInfo.dwTime;
+                nIdleTime = nEnvTicks - nLastInputTick;
+            }       
+            return ((nIdleTime > 0) ? (nIdleTime / 1000) : nIdleTime);
+        }
+        public static void loginIdleUser()
+        {
+            if ((GetLastInputTime() > 9)&& (loginExpert))           
+                LoginUser();
+        }
+        
+        
 
         
     }

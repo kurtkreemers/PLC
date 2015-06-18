@@ -1,7 +1,6 @@
 ﻿#region Using
 using HmiExample.PlcConnectivity;
 using S7NetWrapper;
-using Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -20,6 +19,8 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using HmiExample.Properties;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
+
 #endregion
 
 namespace HmiExample
@@ -30,8 +31,8 @@ namespace HmiExample
     public partial class MainWindow : Window
     {
         DispatcherTimer timer = new DispatcherTimer();
-  
-        int count = 0;
+       
+       
         public MainWindow()
         {
             InitializeComponent();
@@ -40,8 +41,7 @@ namespace HmiExample
             timer.IsEnabled = true;
             txtIpAddress.Text = Settings.Default.IpAddress;
             lblLogin.Text = Login.LoginStatus();
-            Log.writeLog("Program started at " + DateTime.Now.TimeOfDay.ToString());
-
+            Log.writeLog("Program start");
         }
 
         void timer_Tick(object sender, EventArgs e)
@@ -56,18 +56,15 @@ namespace HmiExample
             lblSetDwordVariable.Content = Plc.Instance.Db1.DWordVariable;
             // statusbar
             lblReadTime.Text = Plc.Instance.CycleReadTime.TotalMilliseconds.ToString(CultureInfo.InvariantCulture);
-            loginCheck();
-           
-               
+            Login.loginIdleUser();
+            lblLogin.Text = Login.LoginStatus();           
         }
-
-       
 
         private void btnConnect_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (Login.loginAdmin || Login.loginExpert)
+                if (Login.LoginStatus() == "ADMIN" || Login.LoginStatus() == "EXPERT")
                 {
                     Plc.Instance.Connect(txtIpAddress.Text);
                     Settings.Default.IpAddress = txtIpAddress.Text;
@@ -89,7 +86,7 @@ namespace HmiExample
         {
             try
             {
-                if (Login.loginAdmin || Login.loginExpert)
+                if (Login.LoginStatus() == "ADMIN" || Login.LoginStatus() == "EXPERT")
                 {
                     Plc.Instance.Disconnect();
                 }
@@ -113,13 +110,14 @@ namespace HmiExample
         {
             try
             {
-                if (Login.loginAdmin)
+                if (Login.LoginStatus() == "ADMIN")
                 {
                     Plc.Instance.Write(PlcTags.BitVariable, 1);
                 }
                 else
                 {
                     MessageBox.Show("Administrator required!!!", "", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+
                 }
                
             }
@@ -138,7 +136,7 @@ namespace HmiExample
         {
             try
             {
-                if (Login.loginAdmin)
+                if (Login.LoginStatus() == "ADMIN")
                 {
                     Plc.Instance.Write(PlcTags.BitVariable, 0);
                 }
@@ -194,7 +192,7 @@ namespace HmiExample
             }
         }
 
-        private void btnAdmin_Click(object sender, RoutedEventArgs e)
+        private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
            
                 Login preview = new Login();
@@ -213,23 +211,15 @@ namespace HmiExample
                    noPermissionBox();
                    e.Cancel = true;
                }
+               else
+                   Log.writeLog("Program stop");
             }
             else
             {
                 e.Cancel = true;
             }
         }
-        private void loginCheck()
-        {
-            if (Login.loginExpert)
-                count += 1;
-            if (count > 100)
-            {
-                count = 0;
-                Login.loginExpert = false;
-                lblLogin.Text = Login.LoginStatus();
-            }
-        }  
+ 
         private void noPermissionBox()
         {
             MessageBox.Show("You don't have the required permissions!!!", "", MessageBoxButton.OK, MessageBoxImage.Hand);

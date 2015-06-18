@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="ConnectionStates.cs" />
     <Compile Include="ISyncPlcDriver.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="PlcDriverException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="S7NetPlcDriver.cs" />
