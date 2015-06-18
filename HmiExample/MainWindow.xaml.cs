@@ -226,6 +226,13 @@ namespace HmiExample
         {
             MessageBox.Show("You don't have the required permissions!!!", "", MessageBoxButton.OK, MessageBoxImage.Hand);
         }
+
+        private void btnChgPsw_Click(object sender, RoutedEventArgs e)
+        {
+            PswChg preview = new PswChg();
+            preview.Owner = this;
+            preview.ShowDialog();
+        }
        
     }
 }

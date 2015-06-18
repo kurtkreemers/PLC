@@ -23,7 +23,7 @@ namespace S7NetWrapper
                 {
 
                     writestream.WriteLine( DateTime.Now.ToShortTimeString() + " : " + input);
-                    //Thread.Sleep(10000);
+                  
                 }
             }
             catch (IOException)

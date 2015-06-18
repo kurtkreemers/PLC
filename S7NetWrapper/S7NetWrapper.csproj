@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="S7.Net">
-      <HintPath>..\..\..\..\..\..\KurtKreemers\CursusPF\packages\S7netplus.0.1\lib\net45\S7.Net.dll</HintPath>
+      <HintPath>..\packages\S7netplus.0.1\lib\net45\S7.Net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

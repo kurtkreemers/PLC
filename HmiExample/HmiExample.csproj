@@ -50,7 +50,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="S7.Net">
-      <HintPath>..\..\..\..\..\..\KurtKreemers\CursusPF\packages\S7netplus.0.1\lib\net45\S7.Net.dll</HintPath>
+      <HintPath>..\packages\S7netplus.0.1\lib\net45\S7.Net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -72,7 +72,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Enums\Users.cs" />
+    <Compile Include="PswChg.xaml.cs">
+      <DependentUpon>PswChg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StringAdminVisibilityConverter.cs" />
+    <Page Include="PswChg.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

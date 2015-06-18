@@ -3863,8 +3863,8 @@
 		<col def="I2">ISIconIndex</col>
 		<row><td>ARPPRODUCTICON.exe</td><td/><td>&lt;ISProductFolder&gt;\redist\Language Independent\OS Independent\setupicon.ico</td><td>0</td></row>
 		<row><td>UNINST_Uninstall_S_65048D6B06504AD0A957266BCFAC8BFB.exe</td><td/><td>C:\Program Files (x86)\InstallShield\2013LE\Redist\Language Independent\OS Independent\uninstall.ico</td><td>0</td></row>
-		<row><td>_Built1_44AAD74980274F5CA118B27666197145.exe</td><td/><td>I:\6. Ontwikkeling .NET\2013 C#\WPF\WPF2013 bestanden\Oefeningen\databinding\font.ico</td><td>0</td></row>
-		<row><td>_Built_AD1A0F9EAAB145879B231007062586A7.exe</td><td/><td>I:\6. Ontwikkeling .NET\2013 C#\WPF\WPF2013 bestanden\Oefeningen\databinding\font.ico</td><td>0</td></row>
+		<row><td>_Built1_BCECB18C54B24764BA16FB830462E0C3.exe</td><td/><td>&lt;VSSolutionFolder&gt;\siemens.ico</td><td>0</td></row>
+		<row><td>_Built_C222D17058B649D39C4DAF69EB4EF44D.exe</td><td/><td>&lt;VSSolutionFolder&gt;\siemens.ico</td><td>0</td></row>
 	</table>
 
 	<table name="IniFile">
@@ -4538,8 +4538,8 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="S255">ISShortcutName</col>
 		<col def="I4">ISAttributes</col>
 		<row><td>UNINST_Uninstall_Step7</td><td>step7</td><td>UNINST|Uninstall Step7</td><td>NewComponent1</td><td>[SystemFolder]msiexec.exe</td><td>/x {E0B820F8-C724-4996-AEC2-4971EAFE40E9}</td><td/><td/><td>UNINST_Uninstall_S_65048D6B06504AD0A957266BCFAC8BFB.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>_Built</td><td>step7</td><td>##IDS_SHORTCUT_DISPLAY_NAME1##</td><td>HmiExample.Primary_output</td><td>AlwaysInstall</td><td/><td/><td/><td>_Built_AD1A0F9EAAB145879B231007062586A7.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>_Built1</td><td>DesktopFolder</td><td>##IDS_SHORTCUT_DISPLAY_NAME1##</td><td>HmiExample.Primary_output</td><td>AlwaysInstall</td><td/><td/><td/><td>_Built1_44AAD74980274F5CA118B27666197145.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>_Built</td><td>step7</td><td>##IDS_SHORTCUT_DISPLAY_NAME1##</td><td>HmiExample.Primary_output</td><td>AlwaysInstall</td><td/><td/><td/><td>_Built_C222D17058B649D39C4DAF69EB4EF44D.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>_Built1</td><td>DesktopFolder</td><td>##IDS_SHORTCUT_DISPLAY_NAME1##</td><td>HmiExample.Primary_output</td><td>AlwaysInstall</td><td/><td/><td/><td>_Built1_BCECB18C54B24764BA16FB830462E0C3.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="Signature">
