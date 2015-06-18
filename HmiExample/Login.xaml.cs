@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Runtime.InteropServices;
+using HmiExample.enums;
 
 namespace HmiExample
 {
@@ -23,7 +24,6 @@ namespace HmiExample
     {
         private static bool loginAdmin;
         private static bool loginExpert;
-        private static List<string> loginVar = new List<string>{"USER","EXPERT","ADMIN"} ;
 
         [DllImport("user32.dll")]
         static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
@@ -31,11 +31,11 @@ namespace HmiExample
         {
             InitializeComponent();
             passwordBox.Clear();
-            foreach (string passw in loginVar)
+            foreach ( Users userName in Enum.GetValues(typeof(Users)))
             {
-                comboboxUserLogin.Items.Add(passw);
+                comboboxUserLogin.Items.Add(userName);
             }
-            comboboxUserLogin.SelectedItem = loginVar[0];
+            comboboxUserLogin.SelectedItem = Users.USER;
            
         }
 
@@ -45,19 +45,19 @@ namespace HmiExample
 
 
 
-            if((e.Key == Key.Return) && ((comboboxUserLogin.SelectedItem.ToString() == loginVar[2])&&(passwordBox.Password == Properties.Settings.Default.AdminPass)))
+            if((e.Key == Key.Return) && ((comboboxUserLogin.SelectedItem.ToString() == Users.ADMIN.ToString())&&(passwordBox.Password == Properties.Settings.Default.AdminPass)))
             {
-                LoginAdmin();
+                LoginUsers(Users.ADMIN);
                this.Close();
             }
-            else if((comboboxUserLogin.SelectedItem.ToString() == loginVar[1])&&(passwordBox.Password == Properties.Settings.Default.ExpertPass))
+            else if((comboboxUserLogin.SelectedItem.ToString() == Users.EXPERT.ToString() )&&(passwordBox.Password == Properties.Settings.Default.ExpertPass))
             {
-                LoginExpert();
+                LoginUsers(Users.EXPERT);
                 this.Close();
             }
-            else if ((comboboxUserLogin.SelectedItem.ToString() == loginVar[0])&&(e.Key == Key.Return))
+            else if ((comboboxUserLogin.SelectedItem.ToString() == Users.USER.ToString())&&(e.Key == Key.Return))
             {
-                LoginUser();
+                LoginUsers(Users.USER);
                 this.Close();
             }
             else if (e.Key == Key.Return)
@@ -68,36 +68,35 @@ namespace HmiExample
             }
        
         }
-        public static void LoginAdmin()
+        public static void LoginUsers(Users user)
         {
-            loginAdmin = true;
-            loginExpert = false;
-            Log.writeLog("LOGIN " + loginVar[2]);
-            
+            if (user == Users.ADMIN)
+            {
+                loginAdmin = true;
+                loginExpert = false;
+            }
+            else if (user == Users.EXPERT)
+            {
+                loginExpert = true;
+                loginAdmin = false;
+            }
+            else
+            {
+                loginExpert = false;
+                loginAdmin = false;
+            }
+            Log.writeLog("LOGIN " + user.ToString());
+
         }
 
-        public static void LoginExpert()
+        public static Users LoginStatus()
         {
-            loginExpert = true;
-            loginAdmin = false;
-            Log.writeLog("LOGIN " + loginVar[1]);
-            
-        }
-        public static void LoginUser()
-        {
-            loginExpert = false;
-            loginExpert = false;
-            Log.writeLog("LOGIN " + loginVar[0]);
-           
-        }
-        public static string LoginStatus()
-        {
-            if(loginAdmin)
-                return loginVar[2];
+            if (loginAdmin)                        
+                return Users.ADMIN;        
             else if (loginExpert)
-                return loginVar[1];
+                return Users.EXPERT;
             else
-                return loginVar[0];
+                return Users.USER;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -125,10 +124,10 @@ namespace HmiExample
             }       
             return ((nIdleTime > 0) ? (nIdleTime / 1000) : nIdleTime);
         }
-        public static void loginIdleUser()
+        public static void IdleControl()
         {
             if ((GetLastInputTime() > 9)&& (loginExpert))           
-                LoginUser();
+                LoginUsers(Users.USER);
         }
         
         

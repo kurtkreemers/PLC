@@ -20,6 +20,7 @@ using System.Windows.Threading;
 using HmiExample.Properties;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using HmiExample.enums;
 
 #endregion
 
@@ -40,7 +41,7 @@ namespace HmiExample
             timer.Tick += timer_Tick;        
             timer.IsEnabled = true;
             txtIpAddress.Text = Settings.Default.IpAddress;
-            lblLogin.Text = Login.LoginStatus();
+            lblLogin.Text = Login.LoginStatus().ToString();
             Log.writeLog("Program start");
         }
 
@@ -56,15 +57,14 @@ namespace HmiExample
             lblSetDwordVariable.Content = Plc.Instance.Db1.DWordVariable;
             // statusbar
             lblReadTime.Text = Plc.Instance.CycleReadTime.TotalMilliseconds.ToString(CultureInfo.InvariantCulture);
-            Login.loginIdleUser();
-            lblLogin.Text = Login.LoginStatus();           
+            UserAttributes();               
         }
 
         private void btnConnect_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (Login.LoginStatus() == "ADMIN" || Login.LoginStatus() == "EXPERT")
+                if (Login.LoginStatus() != Users.USER)
                 {
                     Plc.Instance.Connect(txtIpAddress.Text);
                     Settings.Default.IpAddress = txtIpAddress.Text;
@@ -86,7 +86,7 @@ namespace HmiExample
         {
             try
             {
-                if (Login.LoginStatus() == "ADMIN" || Login.LoginStatus() == "EXPERT")
+                if (Login.LoginStatus() != Users.USER)
                 {
                     Plc.Instance.Disconnect();
                 }
@@ -110,7 +110,7 @@ namespace HmiExample
         {
             try
             {
-                if (Login.LoginStatus() == "ADMIN")
+                if (Login.LoginStatus() == Users.ADMIN)
                 {
                     Plc.Instance.Write(PlcTags.BitVariable, 1);
                 }
@@ -136,7 +136,7 @@ namespace HmiExample
         {
             try
             {
-                if (Login.LoginStatus() == "ADMIN")
+                if (Login.LoginStatus() == Users.ADMIN)
                 {
                     Plc.Instance.Write(PlcTags.BitVariable, 0);
                 }
@@ -198,7 +198,7 @@ namespace HmiExample
                 Login preview = new Login();
                 preview.Owner = this;
                 preview.ShowDialog();
-                lblLogin.Text = Login.LoginStatus();
+                lblLogin.Text = Login.LoginStatus().ToString();
                 
         }
              
@@ -206,7 +206,7 @@ namespace HmiExample
         {
             if (MessageBox.Show("Do you want to close the program?","", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
             {
-               if (Login.LoginStatus() != "ADMIN" )
+               if (Login.LoginStatus() != Users.ADMIN )
                {
                    noPermissionBox();
                    e.Cancel = true;
@@ -219,7 +219,12 @@ namespace HmiExample
                 e.Cancel = true;
             }
         }
- 
+        private void UserAttributes()
+        {
+            Login.IdleControl();
+            lblLogin.Text = Login.LoginStatus().ToString();
+           
+        }
         private void noPermissionBox()
         {
             MessageBox.Show("You don't have the required permissions!!!", "", MessageBoxButton.OK, MessageBoxImage.Hand);
