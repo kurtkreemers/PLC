@@ -76,6 +76,11 @@
       <DependentUpon>PswChg.xaml</DependentUpon>
     </Compile>
     <Compile Include="PlcConnectivity\StringAdminVisibilityConverter.cs" />
+    <Compile Include="Resources\TXT.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TXT.resx</DependentUpon>
+    </Compile>
     <Page Include="PswChg.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -120,6 +125,10 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TXT.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TXT.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

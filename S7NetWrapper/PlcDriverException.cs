@@ -13,7 +13,7 @@ namespace S7NetWrapper
 
         public PlcDriverException(ErrorCode code) 
         {
-            this.Error = Error;            
+            this.Error = Error;          
         }
     }
 }

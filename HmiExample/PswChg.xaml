@@ -1,14 +1,16 @@
 ﻿<Window x:Class="HmiExample.PswChg"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Password Change" Height="225" Width="200" ResizeMode="NoResize">
+        Title="Password Change" Height="290" Width="200" ResizeMode="NoResize">
     <StackPanel>
-    <Label>Select User :</Label>
-        <ComboBox Name="comboboxUserLogin" Width="100" Height="20" ></ComboBox> 
+    <Label>Select user :</Label>
+        <ComboBox Name="comboboxUserLogin" Width="100" Height="20" ></ComboBox>
+        <Label HorizontalAlignment="Center">Type old password :</Label>
+        <PasswordBox Name="passwordBox1" Height="20" Width="100" VerticalAlignment="Center" Password="pass" Margin="5" LostFocus="passwordBox1_LostFocus" />
         <Label HorizontalAlignment="Center">Type new password :</Label>
-    <PasswordBox Name="passwordBox1" Height="20" Width="100" VerticalAlignment="Center" Password="pass" Margin="5"></PasswordBox>
+    <PasswordBox Name="passwordBox2" Height="20" Width="100" VerticalAlignment="Center" Password="pass" Margin="5" ></PasswordBox>
         <Label HorizontalAlignment="Center">Repeat new password :</Label>
-        <PasswordBox Name="passwordBox2" Height="20" Width="100" VerticalAlignment="Center" Password="pass"></PasswordBox>
-        <Button Name="btnChgPswOk" Content="OK" Height="25" Width="25" Margin="10"></Button>
+        <PasswordBox Name="passwordBox3" Height="20" Width="100" VerticalAlignment="Center" Password="pass"></PasswordBox>
+        <Button Name="btnChgPswOk" Content="OK" Height="25" Width="25" Margin="10" Click="btnChgPswOk_Click" ></Button>
     </StackPanel>
 </Window>

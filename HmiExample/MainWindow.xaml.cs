@@ -17,10 +17,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using HmiExample.Properties;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using HmiExample.enums;
+using HmiExample.Resources;
+using HmiExample.Properties;
 
 #endregion
 
@@ -46,7 +47,7 @@ namespace HmiExample
         }
 
         void timer_Tick(object sender, EventArgs e)
-        {
+        { 
             btnConnect.IsEnabled = Plc.Instance.ConnectionState == ConnectionStates.Offline;
             btnDisconnect.IsEnabled = Plc.Instance.ConnectionState != ConnectionStates.Offline;
             lblConnectionState.Text = Plc.Instance.ConnectionState.ToString();
@@ -72,13 +73,13 @@ namespace HmiExample
                 }
                 else
                 {
-                    noPermissionBox();
+                    throw new Exception(TXT.NoPermissionRights);
                 }
 
             }
             catch(Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message,"",MessageBoxButton.OK ,MessageBoxImage.Error);
             }
         }
 
@@ -92,7 +93,7 @@ namespace HmiExample
                 }
                 else
                 {
-                    noPermissionBox();
+                    throw new Exception(TXT.NoPermissionRights);
                 }
             }
             catch (Exception exc)
@@ -116,14 +117,14 @@ namespace HmiExample
                 }
                 else
                 {
-                    MessageBox.Show("Administrator required!!!", "", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                    throw new Exception(TXT.NoPermissionRights);
 
                 }
                
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message, "", MessageBoxButton.OK, MessageBoxImage.Asterisk);
             }
         }
 
@@ -142,13 +143,13 @@ namespace HmiExample
                 }
                 else
                 {
-                    MessageBox.Show("Administrator required!!!","", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                    throw new Exception(TXT.NoPermissionRights);
                 }
                 
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message, "", MessageBoxButton.OK, MessageBoxImage.Asterisk);
             }
         }
 
@@ -202,12 +203,14 @@ namespace HmiExample
              
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            if (MessageBox.Show("Close the program?","", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
+            try
+            {
+            if (MessageBox.Show(TXT.PrgClose,"", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
             {
                if (Login.LoginStatus() != Users.ADMIN )
                {
-                   noPermissionBox();
                    e.Cancel = true;
+                   throw new Exception(TXT.NoPermissionRights);        
                }
                else
                    Log.writeLog("Program stopped");
@@ -216,18 +219,19 @@ namespace HmiExample
             {
                 e.Cancel = true;
             }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message,"",MessageBoxButton.OK,MessageBoxImage.Error);
+            }
         }
         private void UserAttributes()
         {
             Login.IdleControl();
             lblLogin.Text = Login.LoginStatus().ToString();          
         }
-        private void noPermissionBox()
-        {
-            MessageBox.Show("You don't have the required permissions!!!", "", MessageBoxButton.OK, MessageBoxImage.Hand);
-        }
-
-        private void btnChgPsw_Click(object sender, RoutedEventArgs e)
+       
+        private  void btnChgPsw_Click(object sender, RoutedEventArgs e)
         {
             PswChg preview = new PswChg();
             preview.Owner = this;

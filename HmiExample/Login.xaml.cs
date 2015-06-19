@@ -1,4 +1,5 @@
-﻿using System;
+﻿#region using
+using System;
 using S7NetWrapper;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Runtime.InteropServices;
 using HmiExample.enums;
-
+using HmiExample.Resources;
+#endregion
 namespace HmiExample
 {
     /// <summary>
@@ -41,10 +43,9 @@ namespace HmiExample
 
         
         private void passwordBox_KeyDown(object sender, KeyEventArgs e)
-        {          
-
-
-
+        {
+            try
+            {       
             if((e.Key == Key.Return) && ((comboboxUserLogin.SelectedItem.ToString() == Users.ADMIN.ToString())&&(passwordBox.Password == Properties.Settings.Default.AdminPass)))
             {
                 LoginUsers(Users.ADMIN);
@@ -62,9 +63,14 @@ namespace HmiExample
             }
             else if (e.Key == Key.Return)
             {
-                Log.writeLog("LOGIN Failure " + comboboxUserLogin.SelectedItem.ToString() + " : wrong password" );
-                MessageBox.Show("The password you entered\n is not valid!!!","",MessageBoxButton.OK,MessageBoxImage.Information);
+                Log.writeLog("LOGIN Failure " + comboboxUserLogin.SelectedItem.ToString() + " : wrong password" );      
                 passwordBox.Clear();
+                throw new Exception(TXT.PswNotValid);               
+            }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message, "", MessageBoxButton.OK, MessageBoxImage.Information); ;
             }
        
         }
